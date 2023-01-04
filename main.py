@@ -1,16 +1,22 @@
 from cryptography.fernet import Fernet
 
-# generate a key for encryption and decryption
 
+
+# generate a key for encryption and decryption
+# You can use fernet to generate
+# the key or use random key generator
+# fernet to generate key
 key = Fernet.generate_key()
 
 # Instance the Fernet class with the key
 
 fernet = Fernet(key)
 
+
 def encrypt():
     # get user input
     message = input("Enter message to encrypt and hit enter: ")
+
 
     # then use the Fernet class instance
     # to encrypt the string, string must
@@ -25,7 +31,6 @@ def encrypt():
 def decrypt():
     #get decryption input
     message2 = input("Enter message without prefix 'b' to decrypt and hit enter: ")
-
     # decrypt the encrypted string with the
     # Fernet instance of the key,
     # that was used for encrypting the string
@@ -41,7 +46,7 @@ def decrypt():
 if __name__ == '__main__':
 
     print("\nWelcome to message encryption and decryption application\n"
-          "\nTo exit application press X anytime and hit enter\n")
+          "To exit application press X and hit enter\n")
     while True:
         print("Do you want to encrypt or decrypt the message?")
         userInput2 = input("Press E for encrypt or D for decrypt and hit enter: ")
@@ -55,5 +60,6 @@ if __name__ == '__main__':
         elif userInput2 == "x":
             exit()
         else:
-            print("\nEnter valid selection\n")
+            print("\nEnter valid selection\n"
+                  "Or to exit application press X and hit enter\n")
 
