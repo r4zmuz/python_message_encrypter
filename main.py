@@ -1,65 +1,60 @@
 from cryptography.fernet import Fernet
 
+def generate_key():
+    """Generates a key for encrypting and decrypting messages."""
+    return Fernet.generate_key()
 
+def create_fernet(key):
+    """Creates a Fernet instance with the given key."""
+    return Fernet(key)
 
-# generate a key for encryption and decryption
-# You can use fernet to generate
-# the key or use random key generator
-# fernet to generate key
-key = Fernet.generate_key()
+def encrypt(fernet, message):
+    """Encrypts the given message with the given Fernet instance."""
+    # Encode the message to a byte string before encrypting it
+    enc_message = fernet.encrypt(message.encode())
+    return enc_message
 
-# Instance the Fernet class with the key
+def decrypt(fernet, enc_message):
+    """Decrypts the given encrypted message with the given Fernet instance."""
+    # Remove the 'b' prefix from the input message
+    enc_message = enc_message.lstrip("b")
+    # Decrypt the message and decode the resulting byte string
+    dec_message = fernet.decrypt(enc_message).decode()
+    return dec_message
 
-fernet = Fernet(key)
-
-
-def encrypt():
-    # get user input
-    message = input("Enter message to encrypt and hit enter: ")
-
-
-    # then use the Fernet class instance
-    # to encrypt the string, string must
-    # be encoded to byte string before encryption
-    encMessage = fernet.encrypt(message.encode())
-    print("")
-    print("original string: ", message)
-    print("encrypted message: ", encMessage)
-    print("")
-
-
-def decrypt():
-    #get decryption input
-    message2 = input("Enter message without prefix 'b' to decrypt and hit enter: ")
-    # decrypt the encrypted string with the
-    # Fernet instance of the key,
-    # that was used for encrypting the string
-    # encoded byte string is returned by decrypt method,
-    # so decode it to string with decode methods
-    decMessage = fernet.decrypt(message2).decode()
-
-    print("decrypted string: ", decMessage)
-    print("")
-
-
-
-if __name__ == '__main__':
-
+def main():
+    """
+    Welcome message and main loop of the message encryption and decryption application.
+    To exit the application, press X anytime and hit enter.
+    """
     print("\nWelcome to message encryption and decryption application\n"
-          "To exit application press X and hit enter\n")
+          "To exit application press X anytime and hit enter\n")
     while True:
         print("Do you want to encrypt or decrypt the message?")
-        userInput2 = input("Press E for encrypt or D for decrypt and hit enter: ")
-        userInput2.lower()
-        if userInput2 == "d":
+        user_input = input("Press E for encrypt or D for decrypt and hit enter: ")
+        user_input = user_input.lower()
+        if user_input == "d":
+            try:
+                enc_message = input("\nEnter message to decrypt and hit enter: ")
+                dec_message = decrypt(fernet, enc_message)
+                print("\ndecrypted string: ", dec_message)
+                print("")
+            except Exception as e:
+                print("\nAn error occurred:\n", e)
+        elif user_input == "e":
+            message = input("\nEnter message to encrypt and hit enter: ")
+            enc_message = encrypt(fernet, message)
+            print("\noriginal string: ", message)
+            print("encrypted message: ", enc_message)
             print("")
-            decrypt()
-        elif userInput2 == "e":
-            print("")
-            encrypt()
-        elif userInput2 == "x":
+        elif user_input == "x":
             exit()
         else:
-            print("\nEnter valid selection\n"
-                  "Or to exit application press X and hit enter\n")
+            print("\nEnter valid selection\n")
 
+if __name__ == '__main__':
+    # Generate a key for encryption and decryption
+    key = generate_key()
+    # Create a Fernet instance with the key
+    fernet = create_fernet(key)
+    main()
