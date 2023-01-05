@@ -1,10 +1,7 @@
 import sys
-from idlelib import window
-from turtle import window_width, window_height
-
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 
 
 def generate_key():
@@ -60,14 +57,20 @@ class MainWindow(QWidget):
         message = self.line_edit.text()
         enc_message = encrypt(fernet, message)
         self.label.setText("Encrypted message:")
-        self.enc_label.setText(enc_message)
+        self.line_edit.setText(enc_message)
 
 
     def decrypt(self):
         enc_message = self.line_edit.text()
-        dec_message = decrypt(fernet, enc_message)
-        self.label.setText("Decrypted message:")
-        self.enc_label.setText(dec_message)
+        if enc_message != "":
+            try:
+                dec_message = decrypt(fernet, enc_message)
+                self.label.setText("Decrypted message:")
+                self.enc_label.setText(dec_message)
+            except InvalidToken:
+                self.enc_label.setText("Enter valid encrypted text")
+        else:
+            self.enc_label.setText("Enter text to decrypt")
 
 if __name__ == '__main__':
     # Generate a key for encryption and decryption
